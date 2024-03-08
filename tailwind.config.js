@@ -22,7 +22,13 @@ module.exports = {
       primary: "#E21C34",
       lightgray: "#F6F6F6",
       lightblack: "#26282A",
-      lightgrey:"#818589"
+      lightgrey:"#818589",
+      pastel1:"#A7C4BC",
+      pastel2:"#F7D3B0", 
+      pastel3:"#E8A87C",
+      pastel4: "#C38D9E",
+      pastel5: "#8A5378"
+
     },
     boxShadow: {
       "3xl": "0 10px 50px 0px rgba(0, 0, 0, 0.15)",

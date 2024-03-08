@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { SaveIcon, TrashIcon } from "@heroicons/react/outline";
 import NoteModal from "./NoteModal";
 
@@ -8,24 +8,31 @@ const Notes = () => {
   const [showAdditionalDiv, setShowAdditionalDiv] = useState(false);
   const [savedNotes, setSavedNotes] = useState([]);
   const [selectedNote, setSelectedNote] = useState(null);
+  const [colorSelections, setColorSelections] = useState([]);
 
   const handleSave = () => {
     if (note.trim() !== "") {
       const newNote = {
         title: title || `Note ${savedNotes.length + 1}`,
         content: note,
+        colorIndex: 0, // Default color index
       };
       setSavedNotes([...savedNotes, newNote]);
+      setColorSelections([...colorSelections, 0]);
       setNote("");
       setTitle("");
       setShowAdditionalDiv(false);
     }
   };
 
+  const pastelColors = ["pastel1", "pastel2", "pastel3", "pastel4", "pastel5"];
+
   const handleDelete = (index) => {
-    const updatedNotes = [...savedNotes];
-    updatedNotes.splice(index, 1);
+    const updatedNotes = savedNotes.filter((_, i) => i !== index);
     setSavedNotes(updatedNotes);
+
+    const updatedColorSelections = colorSelections.filter((_, i) => i !== index);
+    setColorSelections(updatedColorSelections);
   };
 
   const handleNoteClick = (note) => {
@@ -36,11 +43,15 @@ const Notes = () => {
     const updatedNotes = savedNotes.map((n) => (n === selectedNote ? editedNote : n));
     setSavedNotes(updatedNotes);
     setSelectedNote(null);
-    console.log('j;jkdfl')
+  };
+
+  const handleColorClick = (index, colorIndex) => {
+    const updatedColorSelections = colorSelections.map((c, i) => (i === index ? colorIndex : c));
+    setColorSelections(updatedColorSelections);
   };
 
   return (
-    <div className="container mx-auto mt-8 w-4/6">
+    <div className="container mx-auto mt-8 w-6/6">
       <div className="flex justify-center mb-4 relative text-white">
         {showAdditionalDiv ? (
           <div className="border border-lightgrey p-4 rounded-lg mb-4 text-white w-[50%] mx-auto">
@@ -58,7 +69,7 @@ const Notes = () => {
               value={note}
               onChange={(e) => setNote(e.target.value)}
               placeholder="Type your notes here..."
-              className="border border-lightgrey bg-lightblack p-2 mb-2 w-full rounded-lg"
+              className="border border-lightgrey bg-lightblack p-2 mb-2 w-full rounded-lg h-24"
             />
             <div className="flex">
               <button onClick={handleSave} className="text-white p-2 mr-2">
@@ -81,20 +92,36 @@ const Notes = () => {
         )}
       </div>
 
-      <div className="flex justify-between flex-wrap">
+      <div className="flex space-x-4 flex-wrap ">
         {savedNotes.map((savedNote, index) => (
-          <div key={index} className="border border-lightgrey p-4 rounded-lg mb-4 text-white w-[48%]">
+          <div key={index} className={`note-container bg-${pastelColors[colorSelections[index]]} border border-lightgrey p-4 rounded-lg mb-4 text-white w-60`}>
             <h2
               className="text-white font-bold mb-2 cursor-pointer"
               onClick={() => handleNoteClick(savedNote)}
             >
               {savedNote.title}
             </h2>
-            <textarea
-              value={savedNote.content}
-              readOnly
-              className="border border-lightgrey bg-lightblack p-2 mb-2 w-full rounded-lg"
-            />
+            <div className={`note-content p-2 mb-2 w-full rounded-lg h-[30px] overflow-hidden`}>
+              {savedNote.content}
+            </div>
+
+            <div>
+              {pastelColors.map((color, colorIndex) => (
+                <button
+                  key={colorIndex}
+                  className={`inline-block h-3 w-3 rounded-full border border-lightgrey bg-${color}`}
+                  onClick={() => handleColorClick(index, colorIndex)}
+                  style={{
+                    backgroundColor: colorIndex === colorSelections[index] ? `var(--${color})` : "transparent",
+                  }}
+                >
+                  {colorIndex === colorSelections[index] && (
+                    <div className={`h-2 w-2 rounded-full bg-${color} mx-auto`} />
+                  )}
+                </button>
+              ))}
+            </div>
+
             <div className="flex">
               <button onClick={() => handleDelete(index)} className="bg text-white p-2">
                 <TrashIcon className="h-6 w-6" />
