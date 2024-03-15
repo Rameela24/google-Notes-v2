@@ -4,18 +4,15 @@ import { FaArrowRotateRight } from "react-icons/fa6";
 import { IoMdSettings } from "react-icons/io";
 import { FaBars } from "react-icons/fa";
 import Sidemenu from "./Sidemenu";
+import { PiNotepad } from "react-icons/pi";
 
 const Navbar = ({ toggleSidemenu }) => {
   return (
     <div>
-      <nav className="bg-lightblack w-full py-4 text-white flex justify-around items-center border-b border-gray-500">
-        <FaBars
-          className="text-gray h-6 w-6 ml-4 cursor-pointer"
-          onClick={toggleSidemenu}
-        />
-        <h1 className="text-2xl font-bold pl-4">Reminder</h1>
-     
-
+      <nav className="bg-lightblack w-full py-4 text-white flex justify-around items-center border-b border-gray">
+      <PiNotepad className="text-yellow h-10 w-10 ml-10"/> 
+        <h1 className="text-2xl font-bold p">Noteable</h1>
+        
 
 
         < div className="max-w-md mx-auto flex items-center">
